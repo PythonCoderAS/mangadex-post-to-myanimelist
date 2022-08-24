@@ -1,3 +1,8 @@
 {
-  "extends": ["pythoncoderas-combo"]
+  "extends": ["pythoncoderas-combo", "plugin:userscripts/recommended"],
+  "rules": {
+    "userscripts/filename-user": "off",
+    "userscripts/no-invalid-metadata": "off",
+    "new-cap": "off"
+  }
 }
