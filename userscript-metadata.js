@@ -6,6 +6,8 @@ console.log(
 // @description  Post chapter discussion to MyAnimeList from MangaDex.
 // @grant        GM.getValue
 // @grant        GM.setValue
+// @grant        GM.deleteValue
+// @grant        GM.xmlHttpRequest
 // @homepage     https://github.com/PythonCoderAS/mangadex-post-to-myanimelist#readme
 // @homepageURL  https://github.com/PythonCoderAS/mangadex-post-to-myanimelist#readme
 // @match        https://mangadex.org/title/*
