@@ -2,7 +2,7 @@ import {Post} from "./types";
 import {getTimestampAfter, mountModal} from "./utils";
 import {ForumPost} from "./components/forumPost/forumPost";
 import {DateTime} from "luxon";
-import * as sleep from "sleep-promise";
+import sleep from "sleep-promise";
 
 export async function queuePost(post: Post){
   const posts: Post[] = JSON.parse(await GM.getValue("queue", "[]") as string)

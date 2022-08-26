@@ -1,4 +1,4 @@
-import * as sleep from "sleep-promise"
+import sleep from "sleep-promise";
 import {mountModal} from "./utils";
 import SessionID from "./components/sessionId/sessionId";
 
