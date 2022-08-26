@@ -11,7 +11,7 @@ console.log(
 // @homepage     https://github.com/PythonCoderAS/mangadex-post-to-myanimelist#readme
 // @homepageURL  https://github.com/PythonCoderAS/mangadex-post-to-myanimelist#readme
 // @match        https://mangadex.org/*
-// @match        https://mangadex.org/chapter/*
+// @match        https://myanimelist.net
 // @run-at       load
 // @source       git+https://github.com/PythonCoderAS/mangadex-post-to-myanimelist.git
 // @supportURL   https://github.com/PythonCoderAS/mangadex-post-to-myanimelist/issues
