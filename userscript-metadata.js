@@ -12,6 +12,8 @@ console.log(
 // @homepageURL  https://github.com/PythonCoderAS/mangadex-post-to-myanimelist#readme
 // @match        https://mangadex.org/*
 // @match        https://myanimelist.net
+// @connect      api.mangadex.org
+// @connect      myanimelist.net
 // @run-at       load
 // @source       git+https://github.com/PythonCoderAS/mangadex-post-to-myanimelist.git
 // @supportURL   https://github.com/PythonCoderAS/mangadex-post-to-myanimelist/issues

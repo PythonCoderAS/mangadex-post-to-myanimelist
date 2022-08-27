@@ -1,5 +1,5 @@
-import {appendElement, Element} from "simple-tsx";
-import {DateTime} from "luxon";
+import { DateTime } from "luxon";
+import { Element, appendElement } from "simple-tsx";
 
 export async function mountModal(modal: Element) {
   const base = document.body;
@@ -11,7 +11,7 @@ export async function mountModal(modal: Element) {
   appendElement(base, modal);
 }
 
-export function getTimestampAfter(ms: number, datetime?: DateTime): DateTime{
-  const time = datetime ?? DateTime.now().setZone("America/New_York")
-  return time.plus({millisecond: ms})
+export function getTimestampAfter(ms: number, datetime?: DateTime): DateTime {
+  const time = datetime ?? DateTime.now().setZone("America/New_York");
+  return time.plus({ millisecond: ms });
 }

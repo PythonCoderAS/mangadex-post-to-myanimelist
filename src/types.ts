@@ -1,5 +1,5 @@
 export interface Post {
-  malId: number
-  chapNum: number
-  text: string
+  malId: number;
+  chapNum: number;
+  body: string;
 }

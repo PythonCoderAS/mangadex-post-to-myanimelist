@@ -3,6 +3,8 @@
   "rules": {
     "userscripts/filename-user": "off",
     "userscripts/no-invalid-metadata": "off",
-    "new-cap": "off"
+    "new-cap": "off",
+    "camelcase": "off",
+    "no-await-in-loop": "off"
   }
 }
