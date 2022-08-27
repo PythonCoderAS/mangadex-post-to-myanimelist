@@ -1,31 +1,33 @@
 import isEqual from "lodash.isequal";
+
 import { Post } from "./types";
 
 class Queue {
   private data: Post[] = [];
-  private toBeDeleted: Post[] = [];
-  private toBeAdded: Post[] = [];
-  private modified: boolean = false;
 
-  async loadQueue(){
-    this.data = JSON.parse(
-      (await GM.getValue("queue", "[]")) as string
-    );
+  private toBeDeleted: Post[] = [];
+
+  private toBeAdded: Post[] = [];
+
+  private modified = false;
+
+  async loadQueue() {
+    this.data = JSON.parse((await GM.getValue("queue", "[]")) as string);
   }
 
-  getItem(): Post | null{
-    const item = this.data[0]
-    if (item){
-      this.data = this.data.splice(0, 1)
-      this.toBeDeleted.push(item)
+  getItem(): Post | null {
+    const item = this.data[0];
+    if (item) {
+      this.data = this.data.splice(0, 1);
+      this.toBeDeleted.push(item);
       this.modified = true;
       return item;
-    } else {
-      return null;
     }
+
+    return null;
   }
 
-  addItem(item: Post){
+  addItem(item: Post) {
     this.data.push(item);
     this.toBeAdded.push(item);
     this.modified = true;
@@ -34,44 +36,48 @@ class Queue {
   /**
    * Merges the current queue's data with the "server" queue (the queue stored in setValue)
    */
-  mergeData(serverData: Post[]): Post[]{
-    if (this.toBeDeleted.length > 0){
-      for (const item of this.toBeDeleted){
+  mergeData(serverData: Post[]): Post[] {
+    if (this.toBeDeleted.length > 0) {
+      for (const item of this.toBeDeleted) {
         let foundIdx: number | null = null;
         // We loop through the server data array to see if there is an identical object to something that this tab/thread deleted.
         // If there is a match, we delete it. Otherwise, assume it has already been deleted and ignore.
         serverData.find((existingItem, index) => {
-          if (isEqual(item, existingItem)){
+          if (isEqual(item, existingItem)) {
             foundIdx = index;
             return true;
           }
+
           return false;
-        })
-        if (foundIdx !== null){
-          serverData.splice(foundIdx, 1)
+        });
+        if (foundIdx !== null) {
+          serverData.splice(foundIdx, 1);
         }
       }
+
       this.toBeDeleted = [];
     }
-    if (this.toBeAdded.length > 0){
-      serverData.push(...this.toBeAdded)
-      this.toBeAdded = []
+
+    if (this.toBeAdded.length > 0) {
+      serverData.push(...this.toBeAdded);
+      this.toBeAdded = [];
     }
+
     return serverData;
   }
 
-  async save(){
+  async save() {
     const serverData: Post[] = JSON.parse(
       (await GM.getValue("queue", "[]")) as string
     );
-    if (this.modified){
+    if (this.modified) {
       const merged = this.mergeData(serverData);
       await GM.setValue("queue", JSON.stringify(merged));
       this.data = merged;
     }
   }
 
-  async loopSave(){
+  async loopSave() {
     await this.save();
     setTimeout(this.loopSave.bind(this), 5 * 1000);
   }

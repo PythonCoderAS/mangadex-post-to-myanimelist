@@ -1,9 +1,6 @@
 import sleep from "sleep-promise";
 
-import SessionID from "./components/sessionId/sessionId";
-import { mountModal } from "./utils";
-
-export async function validateCsrfToken() {
+export default async function validateCsrfToken() {
   if (await GM.getValue("csrf_token")) {
     return;
   }

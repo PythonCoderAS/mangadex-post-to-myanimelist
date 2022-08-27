@@ -1,8 +1,11 @@
-.form input, .form textarea, .form select {
+.form input,
+.form textarea,
+.form select {
   background-color: inherit;
 }
 
-.form input, .form select {
+.form input,
+.form select {
   width: 15%;
   border: 1px solid #ddd;
   padding: 3px;
