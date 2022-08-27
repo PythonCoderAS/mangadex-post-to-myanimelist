@@ -26,11 +26,3 @@ export async function validateCsrfToken() {
     newWindow.close();
   }
 }
-
-export async function specifySessionToken() {
-  if (await GM.getValue("MALSESSIONID")) {
-    return;
-  }
-
-  mountModal(SessionID());
-}

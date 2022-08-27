@@ -1,24 +1,28 @@
-.number_input, .submit_input {
+.form input, .form textarea, .form select {
+  background-color: inherit;
+}
+
+.form input, .form select {
   width: 15%;
   border: 1px solid #ddd;
   padding: 3px;
   margin-right: 10px;
 }
 
-.textarea {
+.form textarea {
   border: 1px solid #ddd;
   width: 100%;
   padding: 3px;
 }
 
-.item:first-child {
+.form > div > *:first-child {
   margin-top: 10px;
 }
 
-.item {
+.form > div > * {
   display: block;
 }
 
-.item:not(:last-child) {
+.form > div > *:not(:last-child) {
   margin-bottom: 10px;
 }

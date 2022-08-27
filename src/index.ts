@@ -1,5 +1,6 @@
-import { worker } from "./main";
+import { openWorkerIfNeeded, queueBackupMonitor, worker } from "./main";
 import assignHandler from "./onkeydown";
-import { specifySessionToken, validateCsrfToken } from "./prompts";
+import { validateCsrfToken } from "./prompts";
+import queue from "./queue";
 
-validateCsrfToken().then(specifySessionToken).then(worker).then(assignHandler);
+validateCsrfToken().then(queue.loadQueue.bind(queue)).then(openWorkerIfNeeded).then(worker).then(assignHandler).then(queue.loopSave.bind(queue)).then(queueBackupMonitor);

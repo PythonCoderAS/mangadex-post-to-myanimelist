@@ -1,6 +1,6 @@
 import * as SimpleTSX from "simple-tsx";
 
-import { queuePost } from "../../main";
+import queue from "../../queue";
 import { Post } from "../../types";
 import { mountModal } from "../../utils";
 import { ErrorModal } from "../errorModal/errorModal";
@@ -74,5 +74,5 @@ export default async function onSubmit(this: HTMLFormElement) {
     chapNum,
     body: bodyText,
   };
-  await queuePost(post);
+  queue.addItem(post);
 }

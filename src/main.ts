@@ -2,40 +2,56 @@ import { DateTime } from "luxon";
 import sleep from "sleep-promise";
 
 import { ErrorModal } from "./components/errorModal/errorModal";
-// eslint-disable-next-line import/no-cycle
 import { ForumPost } from "./components/forumPost/forumPost";
+import queue from "./queue";
 import { Post } from "./types";
 import { getTimestampAfter, mountModal } from "./utils";
-
-export async function queuePost(post: Post) {
-  const posts: Post[] = JSON.parse(
-    (await GM.getValue("queue", "[]")) as string
-  );
-  posts.push(post);
-  await GM.setValue("queue", JSON.stringify(posts));
-}
 
 async function setTimeToWake(ms: number) {
   const newMS = getTimestampAfter(ms).toMillis();
   await GM.setValue("sleep", newMS);
 }
 
-async function sleepRequiredTime() {
+async function getTimeToSleep(): Promise<number>{
   const msToWakeOn = (await GM.getValue("sleep", 0)) as number;
   const currentTime = DateTime.now().setZone("America/New_York").toMillis();
-  if (msToWakeOn > currentTime) {
-    await sleep(msToWakeOn - currentTime);
+  return msToWakeOn - currentTime;
+}
+
+async function sleepRequiredTime() {
+  const timeToSleep = await getTimeToSleep()
+  if (timeToSleep > 0) {
+    await sleep(timeToSleep);
+  }
+}
+
+async function lastTimePosted(): Promise<number> {
+  return (await GM.getValue("lastPost", 0) as number);
+}
+
+// If there are queued posts and we haven't slept in over 6 minutes (more than enough time for one post), the queue is backed up and this likely means the worker thread is dead.
+async function queueIsBackedUp(){
+  return queue.length > 0 && (await getTimeToSleep() > ((6 * 60) * 1000));
+}
+
+export async function openWorkerIfNeeded(){
+  if (location.origin === "https://mangadex.org" && location.search.includes("lock=1")){
+    return;
+  }
+  const backedUpQueue = await queueIsBackedUp()
+  // If the queue is backed up, we want to take ownership of the queue.
+  if (backedUpQueue){
+    window.open("https://mangadex.org/?lock=1");
   }
 }
 
 export async function worker() {
+  if (!(location.origin === "https://mangadex.org" && location.search.includes("lock=1"))){
+    return;
+  }
   await sleepRequiredTime();
-  const posts: Post[] = JSON.parse(
-    (await GM.getValue("queue", "[]")) as string
-  );
-  if (posts.length > 0) {
-    const post = posts.splice(0, 1)[0];
-    await GM.setValue("queue", JSON.stringify(posts));
+  if (queue.length > 0) {
+    const post = queue.getItem()!;
     GM.xmlHttpRequest({
       url: `https://myanimelist.net/forum/?${new URLSearchParams({
         action: "post",
@@ -53,10 +69,11 @@ export async function worker() {
         csrf_token: (await GM.getValue("csrf_token")) as string,
       }).toString(),
       headers: {
-        Cookie: `MALSESSIONID=${await GM.getValue("MALSESSIONID")}`,
+        "Content-Type": "application/x-www-form-urlencoded"
       },
       method: "POST",
       onreadystatechange(response: GM.Response<void>) {
+        GM.setValue("lastPost", DateTime.now().setZone("America/New_York").toMillis())
         let requeue = false;
         if (response.readyState === 4) {
           if (
@@ -100,7 +117,7 @@ export async function worker() {
           }
 
           if (requeue) {
-            queuePost(post);
+            queue.addItem(post);
           }
         }
       },
@@ -111,4 +128,12 @@ export async function worker() {
   }
 
   setTimeout(worker, 0);
+}
+
+export async function queueBackupMonitor(){
+  const backedUp = await queueIsBackedUp()
+  if (backedUp){
+    await openWorkerIfNeeded()
+  }
+  setTimeout(queueBackupMonitor, 10 * 1000)
 }

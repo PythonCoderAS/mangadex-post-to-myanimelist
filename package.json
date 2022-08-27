@@ -23,7 +23,8 @@
   "devDependencies": {
     "@trivago/prettier-plugin-sort-imports": "^3.3.0",
     "@types/greasemonkey": "^4.0.3",
-    "@types/toastify-js": "^1.11.1",
+    "@types/lodash.isequal": "^4.5.6",
+    "@types/luxon": "^3.0.0",
     "css-loader": "^6.7.1",
     "eslint": "^8.23.0",
     "eslint-config-prettier": "^8.5.0",
@@ -37,7 +38,7 @@
     "webpack-cli": "^4.10.0"
   },
   "dependencies": {
-    "@types/luxon": "^3.0.0",
+    "lodash.isequal": "^4.5.0",
     "luxon": "^3.0.1",
     "simple-tsx": "^1.2.2",
     "sleep-promise": "^9.1.0"

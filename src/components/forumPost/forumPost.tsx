@@ -1,8 +1,8 @@
 import * as SimpleTSX from "simple-tsx";
+import queue from "../../queue";
 
 import { Post } from "../../types";
 import { FormModal } from "../formModal/formModal";
-import forumPostStyles from "./forumPost.module.css";
 import onSubmit from "./submit";
 
 export interface ForumPostProps extends Partial<Post> {
@@ -16,13 +16,12 @@ export interface ForumPostProps extends Partial<Post> {
 export function ForumPost(props: ForumPostProps) {
   const body: SimpleTSX.Element = (
     <div>
-      <div class={forumPostStyles.item}>
+      <div>
       {props.malId ? (
         <input
           type="number"
           id="mal-id"
           name="mal-id"
-          class={forumPostStyles.number_input}
           value={props.malId}
         />
       ) : (
@@ -30,18 +29,16 @@ export function ForumPost(props: ForumPostProps) {
           type="number"
           id="mal-id"
           name="mal-id"
-          class={forumPostStyles.number_input}
         />
       )}
       <label for="mal-id">MyAnimeList Manga Entry ID</label>
       </div>
-      <div class={forumPostStyles.item}>
+      <div>
       {props.chapNum ? (
         <input
           type="number"
           id="mal-chapter-num"
           name="mal-chapter-num"
-          class={forumPostStyles.number_input}
           value={props.chapNum}
         />
       ) : (
@@ -49,19 +46,17 @@ export function ForumPost(props: ForumPostProps) {
           type="number"
           id="mal-chapter-num"
           name="mal-chapter-num"
-          class={forumPostStyles.number_input}
         />
       )}
       <label for="mal-chapter-num">Chapter Number (whole numbers only)</label>
       </div>
-      <div class={forumPostStyles.item}>
+      <div>
       <label for="post-body">Enter BBcode for forum post:</label>
       {props.body ? (
         <textarea
           id="post-body"
           name="post-body"
           rows="5"
-          class={forumPostStyles.textarea}
         >
           {props.body}
         </textarea>
@@ -70,11 +65,10 @@ export function ForumPost(props: ForumPostProps) {
           id="post-body"
           name="post-body"
           rows="5"
-          class={forumPostStyles.textarea}
         ></textarea>
       )}
       </div>
-      <input type="submit" class={forumPostStyles.submit_input}>Post</input>
+      <input type="submit">Post</input>
     </div>
   );
   if (props.readonly) {

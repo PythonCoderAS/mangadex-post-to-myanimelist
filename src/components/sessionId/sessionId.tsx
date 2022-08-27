@@ -7,8 +7,11 @@ import { FormModal } from "../formModal/formModal";
 export default function SessionID() {
   const body = (
     <div>
+      <div>
       <input type="text" id="mal-session-id" name="mal-session-id" />
       <label for="mal-session-id">MAL Session ID</label>
+      </div>
+      <input type="submit">Post</input>
     </div>
   );
   return (
