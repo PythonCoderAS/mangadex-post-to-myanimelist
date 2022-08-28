@@ -48,6 +48,13 @@ export function ForumPost(props: ForumPostProps) {
         )}
       </div>
       <input type="submit">Post</input>
+      <hr />
+      <div>
+        <b>Current Queued Posts: {queue.length}</b>
+        <pre style="border: 1px #DDD">
+          {JSON.stringify(queue.posts, undefined, 2)}
+        </pre>
+      </div>
     </div>
   );
   if (props.readonly) {

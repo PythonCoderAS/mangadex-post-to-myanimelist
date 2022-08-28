@@ -85,6 +85,10 @@ class Queue {
   get length(): number {
     return this.data.length;
   }
+
+  get posts(): Post[] {
+    return [...this.data];
+  }
 }
 
 const queue: Queue = new Queue();
