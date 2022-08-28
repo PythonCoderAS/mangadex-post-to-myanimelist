@@ -51,7 +51,7 @@ export function ForumPost(props: ForumPostProps) {
       <hr />
       <div>
         <b>Current Queued Posts: {queue.length}</b>
-        <pre style="border: 1px #DDD">
+        <pre style="border: 1px solid #DDD; padding: 5px;">
           {JSON.stringify(queue.posts, undefined, 2)}
         </pre>
       </div>
