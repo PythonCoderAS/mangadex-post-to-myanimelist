@@ -5,8 +5,6 @@ import queue from "./queue";
 
 validateCsrfToken()
   .then(queue.loadQueue.bind(queue))
-  .then(openWorkerIfNeeded)
+  .then(queue.loopSave.bind(queue))
   .then(worker)
   .then(assignHandler)
-  .then(queue.loopSave.bind(queue))
-  .then(queueBackupMonitor);
