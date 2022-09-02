@@ -26,7 +26,7 @@ export default function getPostDataFromChapter(
             if (Number.isNaN(chapNum)) {
               chapNum = undefined;
             } else {
-              chapNum = Math.trunc(chapNum)
+              chapNum = Math.trunc(chapNum);
             }
 
             const manga = data.data.relationships.find(
