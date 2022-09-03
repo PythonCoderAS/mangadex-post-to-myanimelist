@@ -13,6 +13,7 @@ class Queue {
 
   async loadQueue() {
     this.data = JSON.parse((await GM.getValue("queue", "[]")) as string);
+    console.log(`Loaded queue with ${this.data.length} items.`);
   }
 
   getItem(): Post | null {
@@ -74,6 +75,8 @@ class Queue {
       const merged = this.mergeData(serverData);
       await GM.setValue("queue", JSON.stringify(merged));
       this.data = merged;
+    } else {
+      this.data = serverData;
     }
   }
 

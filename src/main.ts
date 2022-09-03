@@ -24,7 +24,7 @@ async function sleepRequiredTime() {
   }
 }
 
-// If there are queued posts and we haven't slept in over 6 minutes (more than enough time for one post), the queue is backed up and this likely means the worker thread is dead.
+// If there are queued posts, and we haven't slept in over 6 minutes (more than enough time for one post), the queue is backed up and this likely means the worker thread is dead.
 async function queueIsBackedUp() {
   return queue.length > 0 && (await getTimeToSleep()) > 6 * 60 * 1000;
 }
