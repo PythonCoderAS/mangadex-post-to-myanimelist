@@ -1,4 +1,4 @@
-import { worker } from "./main";
+import worker from "./main";
 import assignHandler from "./onkeydown";
 import validateCsrfToken from "./prompts";
 import queue from "./queue";
