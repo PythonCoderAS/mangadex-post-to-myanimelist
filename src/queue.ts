@@ -68,16 +68,18 @@ class Queue {
   }
 
   async save() {
-    const serverData: Post[] = JSON.parse(
-      (await GM.getValue("queue", "[]")) as string
-    );
-    if (this.modified) {
-      const merged = this.mergeData(serverData);
-      await GM.setValue("queue", JSON.stringify(merged));
-      this.data = merged;
-    } else {
-      this.data = serverData;
-    }
+    await navigator.locks.request("queue-save", async () => {
+      const serverData: Post[] = JSON.parse(
+        (await GM.getValue("queue", "[]")) as string
+      );
+      if (this.modified) {
+        const merged = this.mergeData(serverData);
+        await GM.setValue("queue", JSON.stringify(merged));
+        this.data = merged;
+      } else {
+        this.data = serverData;
+      }
+    });
   }
 
   async loopSave() {

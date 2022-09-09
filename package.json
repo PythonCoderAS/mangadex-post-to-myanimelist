@@ -1,6 +1,6 @@
 {
   "name": "mangadex-post-to-myanimelist",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Post chapter discussion to MyAnimeList from MangaDex.",
   "type": "commonjs",
   "private": true,
