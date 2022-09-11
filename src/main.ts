@@ -20,6 +20,12 @@ async function getTimeToSleep(): Promise<number> {
 async function sleepRequiredTime() {
   const timeToSleep = await getTimeToSleep();
   if (timeToSleep > 0) {
+    console.log(
+      `Sleeping until ${DateTime.now()
+        .setZone("America/New_York")
+        .plus(timeToSleep)
+        .toLocaleString(DateTime.DATETIME_SHORT)}`
+    );
     await sleep(timeToSleep);
   }
 }
