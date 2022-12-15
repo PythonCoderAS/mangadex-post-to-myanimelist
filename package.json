@@ -25,7 +25,7 @@
     "@types/greasemonkey": "^4.0.3",
     "@types/lodash.isequal": "^4.5.6",
     "@types/luxon": "^3.0.2",
-    "css-loader": "^6.7.2",
+    "css-loader": "^6.7.3",
     "eslint": "^8.27.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-config-pythoncoderas-combo": "^1.1.3",
