@@ -77,6 +77,11 @@ export default async function worker() {
                   })
                 );
                 requeue = true;
+              } else if (response.status === 400) {
+                // This usually means our CSRF token was invalid.
+                // Delete it and reload the page to invole the CSRF regeneration process.
+                requeue = true;
+                GM.deleteValue("csrf_token").then(() => sleep(250)).then(location.reload);
               } else if (
                 response.responseText.includes('<div class="badresult">')
               ) {
