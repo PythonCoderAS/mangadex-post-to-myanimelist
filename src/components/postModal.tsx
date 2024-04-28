@@ -19,7 +19,7 @@ export default function PostModal(props: ForumPostProps & ModalClosedProps) {
   const { addModal, removeModal } = useContext(ModalContext);
   console.log(props);
   return (
-    <Modal setClosed={props.setClosed} closed={props.closed}>
+    <Modal setClosed={props.setClosed} closed={props.closed} heading={props.heading ?? "Create Forum Post"}>
       <Form
         formmethod="dialog"
         onSubmit={generateSubmitHandler(queue, addModal, removeModal)}

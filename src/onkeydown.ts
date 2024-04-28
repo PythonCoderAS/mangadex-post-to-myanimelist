@@ -28,9 +28,9 @@ export default function generateOnKeyDownHandler(
           if (data) {
             dataHandler(data);
           }
+        } else {
+          dataHandler({});
         }
-
-        dataHandler({});
       }
     }
   };

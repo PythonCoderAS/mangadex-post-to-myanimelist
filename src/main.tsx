@@ -1,10 +1,8 @@
 import { DateTime } from "luxon";
-import { JSX } from "preact/jsx-runtime";
 
 import { ForumPostProps } from "./components/postModal";
 import makeSelfMountingModal from "./components/selfMountingModal";
 import { AddModalSignature, RemoveModalSignature } from "./context";
-import queue from "./queue";
 import Queue from "./queue";
 import { getTimestampAfter, sleep } from "./utils";
 
@@ -64,7 +62,7 @@ export default function worker(
             "Content-Type": "application/x-www-form-urlencoded",
           },
           method: "POST",
-          // eslint-disable-next-line no-loop-func, @typescript-eslint/no-loop-func
+          // eslint-disable-next-line @typescript-eslint/no-loop-func
           onreadystatechange(response: GM.Response<void>) {
             GM.setValue(
               "lastPost",

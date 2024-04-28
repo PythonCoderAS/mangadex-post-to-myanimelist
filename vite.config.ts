@@ -14,7 +14,6 @@ export default defineConfig({
       fileName(format) {
         return `mangadex-post-to-myanimelist.${format}.js`;
       },
-    },
-    sourcemap: "inline"
+    }
   },
 });
