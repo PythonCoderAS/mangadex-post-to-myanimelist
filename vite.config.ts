@@ -6,7 +6,13 @@ import cssInjectedByJsPlugin from "vite-plugin-css-injected-by-js";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [preact(), cssInjectedByJsPlugin()],
+  plugins: [preact(), cssInjectedByJsPlugin({
+    cssAssetsFilterFunction(chunk) {
+      return ![
+        "editor-wysiwyg.css",
+      ].includes(chunk.fileName);
+    }
+  })],
   build: {
     lib: {
       entry: resolve(import.meta.dirname, "src/index.tsx"),
@@ -16,4 +22,5 @@ export default defineConfig({
       },
     },
   },
+  base: "https://pythoncoderas.github.io/mangadex-post-to-myanimelist/"
 });
