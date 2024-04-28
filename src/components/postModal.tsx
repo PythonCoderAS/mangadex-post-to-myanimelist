@@ -1,9 +1,7 @@
 import { useContext, useEffect, useRef, useState } from "preact/hooks";
-import "sceditor/minified/themes/modern.min.css";
-import "sceditor/src/formats/bbcode";
-import "sceditor/src/sceditor";
 
 import { ModalContext, QueueContext } from "../context";
+import "../sceditor-imports";
 import generateSubmitHandler from "../submit";
 import { ModalClosedProps, Post } from "../types";
 import editorStylesURL from "./editor-wysiwyg.css?url";
@@ -40,6 +38,7 @@ export default function PostModal(props: ForumPostProps & ModalClosedProps) {
       window.sceditor.create(textareaRef.current, {
         format: "bbcode",
         style: editorStylesURL,
+        toolbarExclude: "emoticon,ltr,rtl"
       });
     }
 
