@@ -86,6 +86,7 @@ function App() {
 
   const primaryDataHandler = useMemo(
     () => (data: ForumPostProps) => {
+      console.log(data);
       setPrimaryModalClosed(false);
       setPrimaryModalData(data);
     },
