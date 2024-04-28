@@ -38,7 +38,7 @@ export default function PostModal(props: ForumPostProps & ModalClosedProps) {
       window.sceditor.create(textareaRef.current, {
         format: "bbcode",
         style: editorStylesURL,
-        toolbarExclude: "emoticon,ltr,rtl",
+        toolbarExclude: "left,emoticon,ltr,rtl",
         plugins: "undo"
       });
     }
