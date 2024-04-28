@@ -14,8 +14,8 @@ export default function SessionID(props: { modalId: number }) {
       setClosed={() => modalContext.removeModal(props.modalId)}
     >
       <Form
-        formmethod="dialog"
-        onSubmit={async function (this: HTMLFormElement) {
+        method="dialog"
+        onSubmit={function (this: HTMLFormElement) {
           const token = this.querySelector("input")!.value;
           if (!token) {
             modalContext.addModal(
@@ -28,8 +28,8 @@ export default function SessionID(props: { modalId: number }) {
             return false;
           }
 
-          await GM.setValue("MALSESSIONID", token);
-
+          GM.setValue("MALSESSIONID", token);
+          return true;
         }}
       >
         <div>
@@ -37,7 +37,7 @@ export default function SessionID(props: { modalId: number }) {
             <input type="text" id="mal-session-id" name="mal-session-id" />
             <label for="mal-session-id">MAL Session ID</label>
           </div>
-          <input type="submit">Post</input>
+          <input type="dialog" formmethod="dialog">Post</input>
         </div>
       </Form>
     </Modal>

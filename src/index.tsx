@@ -51,6 +51,7 @@ function App() {
   const [ready, setReady] = useState(false);
   const [primaryModalClosed, setPrimaryModalClosed] = useState(true);
   const [primaryModalData, setPrimaryModalData] = useState<ForumPostProps>({});
+  const [primaryModelLoading, setPrimaryModalLoading] = useState(false);
   const [modals, setModals] = useReducer(
     modalReducer,
     new Map<number, JSX.Element>()
@@ -82,6 +83,14 @@ function App() {
     []
   );
 
+  const primaryDataLoadingHandler = useMemo(
+    () => (loading: boolean) => {
+      setPrimaryModalLoading(loading);
+      setPrimaryModalClosed(false);
+    },
+    []
+  );
+
   useEffect(() => {
     validateCsrfToken()
       .then(queue.loadQueue.bind(queue))
@@ -95,11 +104,11 @@ function App() {
     console.log(`Effect called. Ready: ${ready}`);
     if (ready) {
       console.log("Attaching handler.");
-      const handler = generateOnKeyDownHandler(primaryDataHandler);
+      const handler = generateOnKeyDownHandler(primaryDataHandler, primaryDataLoadingHandler);
       window.addEventListener("keydown", handler);
       return () => window.removeEventListener("keydown", handler);
     }
-  }, [ready, primaryDataHandler]);
+  }, [ready, primaryDataHandler, primaryDataLoadingHandler]);
 
   return (
     <ModalContext.Provider
@@ -114,6 +123,7 @@ function App() {
           {...primaryModalData}
           setClosed={setPrimaryModalClosed}
           closed={primaryModalClosed}
+          loading={primaryModelLoading}
         />,
         {Array.from(modals.entries()).map(([id, modal]) => (
           <div key={id}>{modal}</div>

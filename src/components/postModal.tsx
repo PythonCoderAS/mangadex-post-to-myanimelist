@@ -12,6 +12,7 @@ export interface ForumPostProps extends Partial<Post> {
   chapNum?: number;
   body?: string;
   readonly?: boolean;
+  loading?: boolean
 }
 
 export default function PostModal(props: ForumPostProps & ModalClosedProps) {
@@ -25,6 +26,7 @@ export default function PostModal(props: ForumPostProps & ModalClosedProps) {
         onSubmit={generateSubmitHandler(queue, addModal, removeModal)}
       >
         <div>
+          {(props.loading ?? false) ? <p>Fetching MAL Data...</p> : null}
           <div>
             <input
               type="number"

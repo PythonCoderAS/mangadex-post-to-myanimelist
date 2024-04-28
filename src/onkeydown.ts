@@ -3,13 +3,15 @@ import { ForumPostProps } from "./components/postModal";
 import getPostDataFromTitle from "./title";
 
 export default function generateOnKeyDownHandler(
-  dataHandler: (data: ForumPostProps) => unknown
+  dataHandler: (data: ForumPostProps) => unknown,
+  setPrimaryModalLoading: (loading: boolean) => void
 ) {
   return async function (event: KeyboardEvent): Promise<void> {
     const key = event.code.toLowerCase().replace("key", "");
     if (location.origin === "https://mangadex.org") {
       if (event.shiftKey && key === "p") {
         // We have our keybind, display our modal.
+        setPrimaryModalLoading(true);
         const titleMatch = location.pathname.match(
           /title\/([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})/
         );
@@ -31,6 +33,8 @@ export default function generateOnKeyDownHandler(
         } else {
           dataHandler({});
         }
+
+        setPrimaryModalLoading(false);
       }
     }
   };
