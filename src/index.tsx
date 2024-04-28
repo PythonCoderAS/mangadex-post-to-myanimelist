@@ -1,3 +1,4 @@
+import { render } from "preact";
 import {
   useContext,
   useEffect,
@@ -12,7 +13,6 @@ import { AddModalModalType, ModalContext, QueueContext } from "./context";
 import worker from "./main";
 import generateOnKeyDownHandler from "./onkeydown";
 import validateCsrfToken from "./prompts";
-import { render } from "preact";
 
 function modalReducer(
   state: Map<number, JSX.Element>,
@@ -112,7 +112,6 @@ function App() {
     </ModalContext.Provider>
   );
 }
-
 
 window.addEventListener("load", () => {
   const root = document.createElement("div");
