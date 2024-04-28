@@ -1,3 +1,5 @@
+const { resolve } = require("path");
+
 console.log(
   `// ==UserScript==
 // @name         mangadex-post-to-myanimelist
@@ -17,15 +19,6 @@ console.log(
 // @source       git+https://github.com/PythonCoderAS/mangadex-post-to-myanimelist.git
 // @supportURL   https://github.com/PythonCoderAS/mangadex-post-to-myanimelist/issues
 // @icon         https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://mangadex.org&size=64
-// @version      ${
-    (
-      await import("./package.json", {
-        with: {
-          type: "json",
-        },
-      })
-    ).version
-  }
+// @version      ${require(resolve(__dirname, "package.json")).version}
 // ==/UserScript==`
 );
-export {};
