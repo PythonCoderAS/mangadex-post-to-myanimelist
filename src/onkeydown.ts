@@ -8,8 +8,7 @@ export default function generateOnKeyDownHandler(
 ) {
   return async function (event: KeyboardEvent): Promise<void> {
     const key = event.code.toLowerCase().replace("key", "");
-    if (location.origin === "https://mangadex.org") {
-      if (event.shiftKey && key === "p") {
+    if ((location.origin === "https://mangadex.org" || import.meta.env.DEV) && event.shiftKey && key === "p") {
         // We have our keybind, display our modal.
         setPrimaryModalLoading(true);
         const titleMatch = location.pathname.match(
@@ -20,15 +19,24 @@ export default function generateOnKeyDownHandler(
         );
         if (titleMatch) {
           // We're at a title page, we can get more information.
-          const data = await getPostDataFromTitle(titleMatch[1]);
+          try {
+            const data = await getPostDataFromTitle(titleMatch[1]);
           if (data) {
             dataHandler(data);
+          }} catch (error) {
+            console.error(error);
+            dataHandler({});
           }
         } else if (chapterMatch) {
           // We're at a chapter page, we can get more information.
-          const data = await getPostDataFromChapter(chapterMatch[1]);
+          try {
+            const data = await getPostDataFromChapter(chapterMatch[1]);
           if (data) {
             dataHandler(data);
+          }
+          } catch (error) {
+            console.error(error);
+            dataHandler({});
           }
         } else {
           dataHandler({});
@@ -36,6 +44,5 @@ export default function generateOnKeyDownHandler(
 
         setPrimaryModalLoading(false);
       }
-    }
-  };
-}
+    };
+  }

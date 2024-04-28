@@ -102,9 +102,12 @@ function App() {
   // eslint-disable-next-line consistent-return
   useEffect(() => {
     console.log(`Effect called. Ready: ${ready}`);
-    if (ready) {
+    if (ready || import.meta.env.DEV) {
       console.log("Attaching handler.");
-      const handler = generateOnKeyDownHandler(primaryDataHandler, primaryDataLoadingHandler);
+      const handler = generateOnKeyDownHandler(
+        primaryDataHandler,
+        primaryDataLoadingHandler
+      );
       window.addEventListener("keydown", handler);
       return () => window.removeEventListener("keydown", handler);
     }
@@ -124,7 +127,8 @@ function App() {
           setClosed={setPrimaryModalClosed}
           closed={primaryModalClosed}
           loading={primaryModelLoading}
-        />,
+        />
+        ,
         {Array.from(modals.entries()).map(([id, modal]) => (
           <div key={id}>{modal}</div>
         ))}

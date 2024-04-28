@@ -4,22 +4,17 @@ import Queue from "./queue";
 import { Post } from "./types";
 
 export default function generateSubmitHandler(
-  queue: Queue,
-  addModal: AddModalSignature,
-  removeModal: RemoveModalSignature
-) {
-  // eslint-disable-next-line consistent-return
-  return async function () {
-    const malId = parseInt(
-      document.querySelector<HTMLInputElement>("#mal-id")!.value,
-      10
-    );
-    const chapNum = parseInt(
-      document.querySelector<HTMLInputElement>("#mal-chapter-num")!.value,
-      10
-    );
-    const bodyText =
-    document.querySelector<HTMLTextAreaElement>("#post-body")!.value;
+  params: {
+    queue: Queue,
+    addModal: AddModalSignature,
+    removeModal: RemoveModalSignature,
+    malId: number,
+    chapNum: number,
+    bodyText: string
+  }
+): () => boolean {
+  const { queue, addModal, removeModal, malId, chapNum, bodyText } = params;
+  return function () {
     if (Number.isNaN(malId) || !Number.isInteger(malId)) {
       addModal(
         makeSelfMountingModal({
@@ -32,7 +27,7 @@ export default function generateSubmitHandler(
           removeModal,
         })
       );
-      return true;
+      return false;
     }
 
     if (Number.isNaN(chapNum) || !Number.isInteger(chapNum)) {
@@ -55,7 +50,7 @@ export default function generateSubmitHandler(
           removeModal,
         })
       );
-      return true;
+      return false;
     }
 
     if (bodyText.length < 15) {
@@ -70,7 +65,7 @@ export default function generateSubmitHandler(
           removeModal,
         })
       );
-      return true;
+      return false;
     }
 
     if (bodyText.length > 65535) {
@@ -85,7 +80,7 @@ export default function generateSubmitHandler(
           removeModal,
         })
       );
-      return true;
+      return false;
     }
 
     const post: Post = {
@@ -93,6 +88,11 @@ export default function generateSubmitHandler(
       chapNum,
       body: bodyText,
     };
+    if (import.meta.env.DEV) {
+      console.log(post);
+    }
+
     queue.addItem(post);
+    return true;
   };
 }
