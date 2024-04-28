@@ -11,6 +11,7 @@ import "sceditor/src/formats/bbcode";
 import "sceditor/minified/themes/modern.min.css";
 import "./editor.css";
 import editorStylesURL from "./editor-wysiwyg.css?url";
+import formModule from "./form.module.css";
 
 export interface ForumPostProps extends Partial<Post> {
   heading?: string;
@@ -42,6 +43,14 @@ export default function PostModal(props: ForumPostProps & ModalClosedProps) {
         style: editorStylesURL,
       });
     }
+
+    const currentRefValue = textareaRef.current;
+    return () => {
+      if (currentRefValue) {
+        // @ts-expect-error SCeditor is pertty old and does not use typescript
+        window.sceditor.instance(currentRefValue).destroy();
+      }
+    };
   }, [textareaRef]);
 
   return (
@@ -69,6 +78,10 @@ export default function PostModal(props: ForumPostProps & ModalClosedProps) {
             props.setClosed(true);
             setMalId(0);
             setChapNum(-1);
+            if (textareaRef.current) {
+              // @ts-expect-error SCeditor is pertty old and does not use typescript
+              window.sceditor.instance(textareaRef.current).val("");
+            }
           }
         }}
       >
@@ -108,7 +121,7 @@ export default function PostModal(props: ForumPostProps & ModalClosedProps) {
               Chapter Number (whole numbers only)
             </label>
           </div>
-          <div>
+          <div class={formModule.sceditorContainer}>
             <label for="post-body">Enter BBcode for forum post:</label>
             <textarea
               id="post-body"

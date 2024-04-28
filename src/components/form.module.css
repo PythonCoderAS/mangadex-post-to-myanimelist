@@ -29,3 +29,9 @@
 .form > div > *:not(:last-child) {
   margin-bottom: 10px;
 }
+
+.sceditorContainer input {
+  width: 100%;
+  border: 1px solid #ddd;
+  padding: 3px;
+}
