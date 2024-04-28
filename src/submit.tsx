@@ -3,16 +3,14 @@ import { AddModalSignature, RemoveModalSignature } from "./context";
 import Queue from "./queue";
 import { Post } from "./types";
 
-export default function generateSubmitHandler(
-  params: {
-    queue: Queue,
-    addModal: AddModalSignature,
-    removeModal: RemoveModalSignature,
-    malId: number,
-    chapNum: number,
-    bodyText: string
-  }
-): () => boolean {
+export default function generateSubmitHandler(params: {
+  queue: Queue;
+  addModal: AddModalSignature;
+  removeModal: RemoveModalSignature;
+  malId: number;
+  chapNum: number;
+  bodyText: string;
+}): () => boolean {
   const { queue, addModal, removeModal, malId, chapNum, bodyText } = params;
   return function () {
     if (Number.isNaN(malId) || !Number.isInteger(malId)) {

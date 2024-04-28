@@ -69,9 +69,7 @@ export default class Queue {
 
   async save() {
     await navigator.locks.request("queue-save", async () => {
-      const serverData: Post[] = JSON.parse(
-        (await GM.getValue("queue", "[]"))
-      );
+      const serverData: Post[] = JSON.parse(await GM.getValue("queue", "[]"));
       if (this.modified) {
         const merged = this.mergeData(serverData);
         await GM.setValue("queue", JSON.stringify(merged));

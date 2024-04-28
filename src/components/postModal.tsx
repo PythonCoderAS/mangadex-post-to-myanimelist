@@ -1,17 +1,16 @@
 import { useContext, useEffect, useRef, useState } from "preact/hooks";
+import "sceditor/minified/themes/modern.min.css";
+import "sceditor/src/formats/bbcode";
+import "sceditor/src/sceditor";
 
 import { ModalContext, QueueContext } from "../context";
 import generateSubmitHandler from "../submit";
 import { ModalClosedProps, Post } from "../types";
-import Form from "./form";
-import Modal from "./modal";
-
-import "sceditor/src/sceditor";
-import "sceditor/src/formats/bbcode";
-import "sceditor/minified/themes/modern.min.css";
-import "./editor.css";
 import editorStylesURL from "./editor-wysiwyg.css?url";
+import "./editor.css";
+import Form from "./form";
 import formModule from "./form.module.css";
+import Modal from "./modal";
 
 export interface ForumPostProps extends Partial<Post> {
   heading?: string;
@@ -63,17 +62,15 @@ export default function PostModal(props: ForumPostProps & ModalClosedProps) {
         method="dialog"
         formmethod="dialog"
         onSubmit={() => {
-          const success = generateSubmitHandler(
-            {
-              queue,
-              addModal,
-              removeModal,
-              malId,
-              chapNum,
-              // @ts-expect-error SCeditor is pertty old and does not use typescript
-              bodyText: window.sceditor.instance(textareaRef.current).val(),
-            }
-          )();
+          const success = generateSubmitHandler({
+            queue,
+            addModal,
+            removeModal,
+            malId,
+            chapNum,
+            // @ts-expect-error SCeditor is pertty old and does not use typescript
+            bodyText: window.sceditor.instance(textareaRef.current).val(),
+          })();
           if (success) {
             props.setClosed(true);
             setMalId(0);
