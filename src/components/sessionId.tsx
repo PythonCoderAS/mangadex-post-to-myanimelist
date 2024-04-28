@@ -26,9 +26,10 @@ export default function SessionID(props: { modalId: number }) {
               })
             );
             return false;
-          } else {
-            await GM.setValue("MALSESSIONID", token);
           }
+
+          await GM.setValue("MALSESSIONID", token);
+
         }}
       >
         <div>

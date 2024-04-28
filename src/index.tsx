@@ -69,6 +69,7 @@ function App() {
   );
 
   console.log(modals);
+  console.log({ primaryModalClosed, primaryModalData });
 
   const addModal = useMemo(
     () => (modal: AddModalModalType) => {
