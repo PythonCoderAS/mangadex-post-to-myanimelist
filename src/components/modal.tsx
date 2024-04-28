@@ -11,7 +11,9 @@ export type ModalProps = React.PropsWithChildren<{
 export default function Modal(props: ModalProps & ModalClosedProps) {
   const dialogRef = React.createRef<HTMLDialogElement>();
   useEffect(() => {
+    console.log(dialogRef.current, props.closed);
     if (dialogRef.current) {
+      console.log(props.closed);
       if (props.closed) {
         dialogRef.current.close();
       } else {
