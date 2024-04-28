@@ -91,6 +91,7 @@ function App() {
 
   useEffect(() => {
     if (ready) {
+      console.log("Attaching handler.")
       const handler = generateOnKeyDownHandler(primaryDataHandler);
       window.addEventListener("keydown", handler);
       return () => window.removeEventListener("keydown", handler);
