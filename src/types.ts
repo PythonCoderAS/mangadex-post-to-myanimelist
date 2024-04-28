@@ -3,3 +3,8 @@ export interface Post {
   chapNum: number;
   body: string;
 }
+
+export interface ModalClosedProps {
+  closed: boolean;
+  setClosed: (closed: boolean) => void;
+}

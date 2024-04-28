@@ -1,10 +1,12 @@
 import { DateTime } from "luxon";
-import sleep from "sleep-promise";
+import { JSX } from "preact/jsx-runtime";
 
-import { ErrorModal } from "./components/errorModal/errorModal";
-import { ForumPost } from "./components/forumPost/forumPost";
+import { ForumPostProps } from "./components/postModal";
+import makeSelfMountingModal from "./components/selfMountingModal";
+import { AddModalSignature, RemoveModalSignature } from "./context";
 import queue from "./queue";
-import { getTimestampAfter, mountModal } from "./utils";
+import Queue from "./queue";
+import { getTimestampAfter, sleep } from "./utils";
 
 async function setTimeToWake(ms: number) {
   const newMS = getTimestampAfter(ms).toMillis();
@@ -30,7 +32,12 @@ async function sleepRequiredTime() {
   }
 }
 
-export default async function worker() {
+export default function worker(
+  queue: Queue,
+  addModal: AddModalSignature,
+  removeModal: RemoveModalSignature,
+  handler: (data: ForumPostProps) => unknown
+) {
   window.navigator.locks.request("post-lock", async () => {
     console.log("Granted post lock.");
     while (true) {
@@ -71,9 +78,16 @@ export default async function worker() {
                   '<h1 class="h1">400 Bad Request</h1>'
                 )
               ) {
-                mountModal(
-                  ErrorModal({
-                    body: "Requests are returning 400 Bad Requests. Check your MAL login.",
+                addModal(
+                  makeSelfMountingModal({
+                    heading: "MAL Token Error",
+                    children: (
+                      <p>
+                        Requests are returning 400 Bad Requests. Check your MAL
+                        login.
+                      </p>
+                    ),
+                    removeModal,
                   })
                 );
                 requeue = true;
@@ -81,7 +95,9 @@ export default async function worker() {
                 // This usually means our CSRF token was invalid.
                 // Delete it and reload the page to invole the CSRF regeneration process.
                 requeue = true;
-                GM.deleteValue("csrf_token").then(() => sleep(250)).then(location.reload);
+                GM.deleteValue("csrf_token")
+                  .then(() => sleep(250))
+                  .then(location.reload);
               } else if (
                 response.responseText.includes('<div class="badresult">')
               ) {
@@ -93,15 +109,13 @@ export default async function worker() {
                   // This means there was another post in-between.
                   requeue = true;
                 } else {
-                  mountModal(
-                    ForumPost({
-                      heading: "Could Not Post, Please Edit and Re-Submit",
-                      malId: post.malId,
-                      chapNum: post.chapNum,
-                      body: post.body,
-                      readonly: true,
-                    })
-                  );
+                  handler({
+                    heading: "Could Not Post, Please Edit and Re-Submit",
+                    malId: post.malId,
+                    chapNum: post.chapNum,
+                    body: post.body,
+                    readonly: true,
+                  });
                 }
               } else if (
                 response.responseText.includes('<div class="goodresult">')

@@ -1,8 +1,8 @@
-import isEqual from "lodash.isequal";
+import { isEqual } from "lodash";
 
 import { Post } from "./types";
 
-class Queue {
+export default class Queue {
   private data: Post[] = [];
 
   private toBeDeleted: Post[] = [];
@@ -95,6 +95,3 @@ class Queue {
     return [...this.data];
   }
 }
-
-const queue: Queue = new Queue();
-export default queue;

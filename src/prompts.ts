@@ -1,4 +1,4 @@
-import sleep from "sleep-promise";
+import { sleep } from "./utils";
 
 export default async function validateCsrfToken() {
   if (await GM.getValue("csrf_token")) {

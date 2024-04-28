@@ -1,14 +1,9 @@
 import { DateTime } from "luxon";
-import { Element, appendElement } from "simple-tsx";
 
-export async function mountModal(modal: Element) {
-  const base = document.body;
-  modal.element
-    .querySelector<HTMLSpanElement>("span[data-close]")!
-    .addEventListener("click", function () {
-      base.removeChild(this.parentElement!.parentElement!.parentElement!);
-    });
-  appendElement(base, modal);
+export function sleep(ms: number): Promise<void> {
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
 }
 
 export function getTimestampAfter(ms: number, datetime?: DateTime): DateTime {
