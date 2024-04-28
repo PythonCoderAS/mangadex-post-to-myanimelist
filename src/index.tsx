@@ -31,10 +31,8 @@ function modalReducer(
     }
 
     case "remove": {
-      if (action.id < 0) {
+      if (action.id <= 0) {
         throw new Error("Invalid ID");
-      } else if (action.id === 0) {
-        throw new Error("Cannot remove primary modal");
       }
 
       state.delete(action.id);
@@ -55,17 +53,7 @@ function App() {
   const [primaryModalData, setPrimaryModalData] = useState<ForumPostProps>({});
   const [modals, setModals] = useReducer(
     modalReducer,
-    new Map<number, JSX.Element>([
-      [
-        0,
-        <PostModal
-          key={0}
-          {...primaryModalData}
-          setClosed={setPrimaryModalClosed}
-          closed={primaryModalClosed}
-        />,
-      ],
-    ])
+    new Map<number, JSX.Element>()
   );
 
   console.log(modals);
@@ -121,6 +109,12 @@ function App() {
       }}
     >
       <>
+        <PostModal
+          key={0}
+          {...primaryModalData}
+          setClosed={setPrimaryModalClosed}
+          closed={primaryModalClosed}
+        />,
         {Array.from(modals.entries()).map(([id, modal]) => (
           <div key={id}>{modal}</div>
         ))}
