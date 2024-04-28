@@ -21,20 +21,30 @@ function modalReducer(
     | { type: "remove"; id: number }
 ): Map<number, JSX.Element> {
   switch (action.type) {
-    case "add":
+    case "add": {
       const id = Math.max(...state.keys(), 0) + 1;
       state.set(
         id,
         typeof action.modal === "function" ? action.modal(id) : action.modal
       );
-    case "remove":
-      if (id < 0) {
+      break;
+    }
+
+    case "remove": {
+      if (action.id < 0) {
         throw new Error("Invalid ID");
-      } else if (id === 0) {
+      } else if (action.id === 0) {
         throw new Error("Cannot remove primary modal");
       }
-      state.delete(id);
+
+      state.delete(action.id);
+      break;
+    }
+
+    default:
+      throw new Error(`Invalid action type.`);
   }
+
   return state;
 }
 
@@ -49,6 +59,7 @@ function App() {
       [
         0,
         <PostModal
+          key={0}
           {...primaryModalData}
           setClosed={setPrimaryModalClosed}
           closed={primaryModalClosed}
@@ -64,7 +75,7 @@ function App() {
       setModals({ type: "add", modal });
       return Math.max(...modals.keys());
     },
-    []
+    [modals]
   );
   const removeModal = useMemo(
     () => (id: number) => {
@@ -89,14 +100,16 @@ function App() {
       .then(() => setReady(true));
   });
 
+  // eslint-disable-next-line consistent-return
   useEffect(() => {
+    console.log(`Effect called. Ready: ${ready}`);
     if (ready) {
-      console.log("Attaching handler.")
+      console.log("Attaching handler.");
       const handler = generateOnKeyDownHandler(primaryDataHandler);
       window.addEventListener("keydown", handler);
       return () => window.removeEventListener("keydown", handler);
     }
-  }, [ready]);
+  }, [ready, primaryDataHandler]);
 
   return (
     <ModalContext.Provider
