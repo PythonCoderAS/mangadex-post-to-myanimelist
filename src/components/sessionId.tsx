@@ -37,7 +37,7 @@ export default function SessionID(props: { modalId: number }) {
             <input type="text" id="mal-session-id" name="mal-session-id" />
             <label for="mal-session-id">MAL Session ID</label>
           </div>
-          <input type="dialog" formmethod="dialog">Post</input>
+          <input type="submit" formmethod="dialog">Post</input>
         </div>
       </Form>
     </Modal>

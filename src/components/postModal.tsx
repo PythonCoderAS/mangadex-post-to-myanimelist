@@ -22,6 +22,7 @@ export default function PostModal(props: ForumPostProps & ModalClosedProps) {
   return (
     <Modal setClosed={props.setClosed} closed={props.closed} heading={props.heading ?? "Create Forum Post"}>
       <Form
+        method="dialog"
         formmethod="dialog"
         onSubmit={generateSubmitHandler(queue, addModal, removeModal)}
       >
@@ -55,7 +56,7 @@ export default function PostModal(props: ForumPostProps & ModalClosedProps) {
               {props.body ?? null}
             </textarea>
           </div>
-          <input type="submit">Post</input>
+          <input type="submit" formmethod="dialog">Post</input>
         </div>
       </Form>
     </Modal>
