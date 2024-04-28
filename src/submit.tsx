@@ -8,17 +8,18 @@ export default function generateSubmitHandler(
   addModal: AddModalSignature,
   removeModal: RemoveModalSignature
 ) {
-  return async function onSubmit(this: HTMLFormElement) {
+  // eslint-disable-next-line consistent-return
+  return async function () {
     const malId = parseInt(
-      this.querySelector<HTMLInputElement>("#mal-id")!.value,
+      document.querySelector<HTMLInputElement>("#mal-id")!.value,
       10
     );
     const chapNum = parseInt(
-      this.querySelector<HTMLInputElement>("#mal-chapter-num")!.value,
+      document.querySelector<HTMLInputElement>("#mal-chapter-num")!.value,
       10
     );
     const bodyText =
-      this.querySelector<HTMLTextAreaElement>("#post-body")!.value;
+    document.querySelector<HTMLTextAreaElement>("#post-body")!.value;
     if (Number.isNaN(malId) || !Number.isInteger(malId)) {
       addModal(
         makeSelfMountingModal({
@@ -33,6 +34,7 @@ export default function generateSubmitHandler(
       );
       return true;
     }
+
     if (Number.isNaN(chapNum) || !Number.isInteger(chapNum)) {
       addModal(
         makeSelfMountingModal({
@@ -55,6 +57,7 @@ export default function generateSubmitHandler(
       );
       return true;
     }
+
     if (bodyText.length < 15) {
       addModal(
         makeSelfMountingModal({
@@ -69,6 +72,7 @@ export default function generateSubmitHandler(
       );
       return true;
     }
+
     if (bodyText.length > 65535) {
       addModal(
         makeSelfMountingModal({
@@ -83,6 +87,7 @@ export default function generateSubmitHandler(
       );
       return true;
     }
+
     const post: Post = {
       malId,
       chapNum,
