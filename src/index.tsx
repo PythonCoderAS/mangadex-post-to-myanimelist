@@ -13,6 +13,7 @@ import { AddModalModalType, ModalContext, QueueContext } from "./context";
 import worker from "./main";
 import generateOnKeyDownHandler from "./onkeydown";
 import validateCsrfToken from "./prompts";
+import "./gm";
 
 function modalReducer(
   state: Map<number, JSX.Element>,

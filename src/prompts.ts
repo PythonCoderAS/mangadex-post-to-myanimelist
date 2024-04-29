@@ -14,7 +14,7 @@ export default async function validateCsrfToken() {
       document.querySelector<HTMLMetaElement>('meta[name="csrf_token"]')!
         .content
     );
-  } else {
+  } else if (!import.meta.env.DEV) {
     const newWindow = window.open("https://myanimelist.net")!;
     while (!(await GM.getValue("csrf_token"))) {
       await sleep(100);
