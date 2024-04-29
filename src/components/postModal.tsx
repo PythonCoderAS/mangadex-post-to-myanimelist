@@ -39,7 +39,7 @@ export default function PostModal(props: ForumPostProps & ModalClosedProps) {
         format: "bbcode",
         style: editorStylesURL,
         toolbarExclude: "left,emoticon,ltr,rtl",
-        plugins: "undo"
+        plugins: "undo",
       });
     }
 

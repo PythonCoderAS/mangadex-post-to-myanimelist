@@ -43,7 +43,7 @@ function modalReducer(
       throw new Error(`Invalid action type.`);
   }
 
-  return state;
+  return new Map(state);
 }
 
 function App() {

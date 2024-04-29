@@ -88,10 +88,18 @@ export default function worker(
                     removeModal,
                   })
                 );
+                console.log(
+                  `Requeing ${JSON.stringify(post)} due to 400 error.`
+                );
                 requeue = true;
               } else if (response.status === 400) {
                 // This usually means our CSRF token was invalid.
                 // Delete it and reload the page to invole the CSRF regeneration process.
+                console.log(
+                  `Requeing ${JSON.stringify(
+                    post
+                  )} due to 400 error (suspected bad CSRF token).`
+                );
                 requeue = true;
                 GM.deleteValue("csrf_token")
                   .then(() => sleep(250))
@@ -105,6 +113,9 @@ export default function worker(
                   )
                 ) {
                   // This means there was another post in-between.
+                  console.log(
+                    `Requeing ${JSON.stringify(post)} due to rate limiting.`
+                  );
                   requeue = true;
                 } else {
                   handler({
@@ -112,7 +123,6 @@ export default function worker(
                     malId: post.malId,
                     chapNum: post.chapNum,
                     body: post.body,
-                    readonly: true,
                   });
                 }
               } else if (
