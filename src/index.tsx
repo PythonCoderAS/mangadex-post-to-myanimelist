@@ -113,6 +113,22 @@ function App() {
     }
   }, [ready, primaryDataHandler, primaryDataLoadingHandler]);
 
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        const maxModalId = Math.max(...modals.keys(), 0);
+        if (maxModalId > 0) {
+          removeModal(maxModalId);
+        } else if (!primaryModalClosed) {
+          setPrimaryModalClosed(true);
+        }
+      }
+    };
+
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, [modals, primaryModalClosed, removeModal]);
+
   return (
     <ModalContext.Provider
       value={{
