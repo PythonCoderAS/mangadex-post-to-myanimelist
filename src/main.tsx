@@ -1,9 +1,11 @@
+import { isEqual } from "lodash";
 import { DateTime } from "luxon";
 
 import { ForumPostProps } from "./components/postModal";
 import makeSelfMountingModal from "./components/selfMountingModal";
 import { AddModalSignature, RemoveModalSignature } from "./context";
 import Queue from "./queue";
+import { Post } from "./types";
 import { getTimestampAfter, sleep } from "./utils";
 
 async function setTimeToWake(ms: number) {
@@ -42,6 +44,17 @@ export default function worker(
       await sleepRequiredTime();
       if (queue.length > 0) {
         const post = queue.getItem()!;
+        const previousRequestsData: Post[] = JSON.parse(
+          await GM.getValue("previousRequests", "[]")
+        );
+        if (previousRequestsData.some((item: Post) => isEqual(item, post))) {
+          console.log(
+            `Skipping ${JSON.stringify(post)} because it was already posted.`
+          );
+          // eslint-disable-next-line no-continue
+          continue;
+        }
+
         GM.xmlHttpRequest({
           url: `https://myanimelist.net/forum/?${new URLSearchParams({
             action: "post",
@@ -128,7 +141,19 @@ export default function worker(
               } else if (
                 response.responseText.includes('<div class="goodresult">')
               ) {
-                // Success, we ignore it.
+                // Success
+                const newRequestsData: Post[] = [
+                  ...previousRequestsData.slice(0),
+                  post,
+                ];
+                if (newRequestsData.length > 100) {
+                  newRequestsData.shift();
+                }
+
+                GM.setValue(
+                  "previousRequests",
+                  JSON.stringify(newRequestsData)
+                );
               }
 
               if (requeue) {
