@@ -4,14 +4,16 @@ import getPostDataFromTitle from "./title";
 
 export default function generateOnKeyDownHandler(
   dataHandler: (data: ForumPostProps) => unknown,
-  setPrimaryModalLoading: (loading: boolean) => void
+  setPrimaryModalLoading: (loading: boolean) => void,
+  primaryModalClosed: boolean
 ) {
   return async function (event: KeyboardEvent): Promise<void> {
     const key = event.code.toLowerCase().replace("key", "");
     if (
       (location.origin === "https://mangadex.org" || import.meta.env.DEV) &&
       event.shiftKey &&
-      key === "p"
+      key === "p" &&
+      primaryModalClosed
     ) {
       // We have our keybind, display our modal.
       setPrimaryModalLoading(true);

@@ -1,6 +1,6 @@
 {
   "name": "mangadex-post-to-myanimelist",
-  "version": "3.2.0",
+  "version": "3.3.0",
   "description": "Post chapter discussion to MyAnimeList from MangaDex.",
   "type": "module",
   "private": true,
@@ -41,6 +41,8 @@
     "vite-plugin-css-injected-by-js": "^3.5.1"
   },
   "dependencies": {
+    "@bbob/preset-react": "^3.0.2",
+    "@bbob/react": "^3.0.2",
     "lodash": "^4.17.21",
     "luxon": "^3.2.1",
     "preact": "^10.20.0",

@@ -1,10 +1,25 @@
 if (import.meta.env.DEV) {
   const valueStore = new Map<string, GM.Value>();
 
-  const getValue: typeof GM.getValue = async(key: string, defaultValue?: GM.Value): Promise<GM.Value | undefined> => valueStore.get(key) ?? defaultValue;
-  const setValue: typeof GM.setValue = async(key: string, value: GM.Value): Promise<void> => { valueStore.set(key, value); };
-  const deleteValue: typeof GM.deleteValue = async(key: string): Promise<void> => { valueStore.delete(key); };
-  const listValues: typeof GM.listValues = async(): Promise<string[]> => Array.from(valueStore.keys());
+  const getValue: typeof GM.getValue = async (
+    key: string,
+    defaultValue?: GM.Value
+  ): Promise<GM.Value | undefined> => valueStore.get(key) ?? defaultValue;
+  const setValue: typeof GM.setValue = async (
+    key: string,
+    value: GM.Value
+  ): Promise<void> => {
+    valueStore.set(key, value);
+  };
+
+  const deleteValue: typeof GM.deleteValue = async (
+    key: string
+  ): Promise<void> => {
+    valueStore.delete(key);
+  };
+
+  const listValues: typeof GM.listValues = async (): Promise<string[]> =>
+    Array.from(valueStore.keys());
 
   window.GM = {
     getValue,

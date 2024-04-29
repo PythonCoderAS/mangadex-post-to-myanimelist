@@ -1,0 +1,20 @@
+.fiveRowTextDiv {
+  max-height: 7rem;
+  overflow: auto;
+}
+
+.queueItem h1,
+.queueItem h2,
+.queueItem h3,
+.queueItem h4,
+.queueItem h5,
+.queueItem h6 {
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.previewBox {
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  padding: 10px;
+}

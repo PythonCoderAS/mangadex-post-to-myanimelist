@@ -10,10 +10,10 @@ import { JSX } from "preact/jsx-runtime";
 
 import PostModal, { ForumPostProps } from "./components/postModal";
 import { AddModalModalType, ModalContext, QueueContext } from "./context";
+import "./gm";
 import worker from "./main";
 import generateOnKeyDownHandler from "./onkeydown";
 import validateCsrfToken from "./prompts";
-import "./gm";
 
 function modalReducer(
   state: Map<number, JSX.Element>,
@@ -107,12 +107,18 @@ function App() {
       console.log("Attaching handler.");
       const handler = generateOnKeyDownHandler(
         primaryDataHandler,
-        primaryDataLoadingHandler
+        primaryDataLoadingHandler,
+        primaryModalClosed
       );
       window.addEventListener("keydown", handler);
       return () => window.removeEventListener("keydown", handler);
     }
-  }, [ready, primaryDataHandler, primaryDataLoadingHandler]);
+  }, [
+    ready,
+    primaryDataHandler,
+    primaryDataLoadingHandler,
+    primaryModalClosed,
+  ]);
 
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
@@ -154,8 +160,6 @@ function App() {
   );
 }
 
-window.addEventListener("load", () => {
-  const root = document.createElement("div");
-  document.body.appendChild(root);
-  render(<App />, root);
-});
+const root = document.createElement("div");
+document.body.appendChild(root);
+render(<App />, root);

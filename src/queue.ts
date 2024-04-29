@@ -80,6 +80,21 @@ export default class Queue {
     });
   }
 
+  getPost(index: number): Post | null {
+    return this.data[index] || null;
+  }
+
+  deletePost(index: number) {
+    this.toBeDeleted.push(this.data[index]);
+    this.data.splice(index, 1);
+    this.modified = true;
+  }
+
+  setPost(index: number, post: Partial<Post>) {
+    this.data[index] = { ...this.data[index], ...post };
+    this.modified = true;
+  }
+
   async loopSave() {
     await this.save();
     setTimeout(this.loopSave.bind(this), 5 * 1000);

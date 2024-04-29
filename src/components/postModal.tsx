@@ -9,6 +9,7 @@ import "./editor.css";
 import Form from "./form";
 import formModule from "./form.module.css";
 import Modal from "./modal";
+import QueueDisplay from "./queueDisplay";
 
 export interface ForumPostProps extends Partial<Post> {
   heading?: string;
@@ -89,7 +90,7 @@ export default function PostModal(props: ForumPostProps & ModalClosedProps) {
               type="number"
               id="mal-id"
               name="mal-id"
-              value={malId === 0 ? undefined : malId}
+              value={malId === 0 ? "" : malId}
               min={0}
               step={1}
               readOnly={props.readonly}
@@ -107,7 +108,7 @@ export default function PostModal(props: ForumPostProps & ModalClosedProps) {
               name="mal-chapter-num"
               min={0}
               step={1}
-              value={chapNum === -1 ? undefined : chapNum}
+              value={chapNum === -1 ? "" : chapNum}
               readOnly={props.readonly}
               required={true}
               onChange={(e) =>
@@ -135,6 +136,12 @@ export default function PostModal(props: ForumPostProps & ModalClosedProps) {
           </input>
         </div>
       </Form>
+      {queue.length > 0 && (
+        <>
+          <hr />
+          <QueueDisplay />
+        </>
+      )}
     </Modal>
   );
 }
