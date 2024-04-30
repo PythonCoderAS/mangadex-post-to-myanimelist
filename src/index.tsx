@@ -160,20 +160,20 @@ function App() {
   );
 }
 
-let done = false;
+{
+  let done = false;
 
-function onLoad() {
-  if (!done) {
-    done = true;
+  // eslint-disable-next-line no-inner-declarations
+  function onLoad() {
+    if (!done) {
+      done = true;
+    }
+
+    const root = document.createElement("div");
+    document.body.appendChild(root);
+    render(<App />, root);
   }
 
-  const root = document.createElement("div");
-  document.body.appendChild(root);
-  render(<App />, root);
-}
+  setTimeout(onLoad, 2000);
 
-if (import.meta.env.DEV) {
-  onLoad();
-} else {
-  window.addEventListener("load", onLoad);
 }
