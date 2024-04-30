@@ -38,11 +38,11 @@ export default class Queue {
    * Merges the current queue's data with the "server" queue (the queue stored in setValue)
    */
   mergeData(serverData: Post[]): Post[] {
-    console.group("Merging server data with local data");
+    console.groupCollapsed("Merging server data with local data");
     console.debug("Server data:");
     console.debug(serverData);
     if (this.toBeDeleted.length > 0) {
-      console.group("Processing deletions");
+      console.groupCollapsed("Processing deletions");
       console.debug("Items to be deleted:");
       console.debug(this.toBeDeleted);
       for (const item of this.toBeDeleted) {
@@ -68,7 +68,7 @@ export default class Queue {
     }
 
     if (this.toBeAdded.length > 0) {
-      console.group("Processing additions");
+      console.groupCollapsed("Processing additions");
       console.debug("Items to be added:");
       console.debug(this.toBeAdded);
       console.groupEnd();
@@ -85,7 +85,7 @@ export default class Queue {
 
   async save() {
     await navigator.locks.request("queue-save", async () => {
-      console.group("Saving queue");
+      console.groupCollapsed("Saving queue");
       const serverData: Post[] = JSON.parse(await GM.getValue("queue", "[]"));
       console.debug("Server data:");
       console.debug(serverData);
@@ -97,7 +97,9 @@ export default class Queue {
         this.data = merged;
         console.debug("Saved queue.");
       } else {
-        console.debug("Queue has not been modified, skipping save and replacing with server version.");
+        console.debug(
+          "Queue has not been modified, skipping save and replacing with server version."
+        );
         this.data = serverData;
       }
 

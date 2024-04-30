@@ -1,3 +1,4 @@
+/* eslint-disable no-continue */
 import { isEqual } from "lodash";
 import { DateTime } from "luxon";
 
@@ -44,6 +45,17 @@ export default function worker(
       await sleepRequiredTime();
       if (queue.length > 0) {
         const post = queue.popItem()!;
+        if (
+          post.malId <= 0 ||
+          post.chapNum <= 0 ||
+          post.body.trim().length < 15
+        ) {
+          console.debug("Ignoring bad post:");
+          console.debug(post);
+          setTimeToWake(100);
+          continue;
+        }
+
         const previousRequestsData: Post[] = JSON.parse(
           await GM.getValue("previousRequests", "[]")
         );
@@ -51,8 +63,7 @@ export default function worker(
           console.log(
             `Skipping ${JSON.stringify(post)} because it was already posted.`
           );
-          setTimeToWake(1000);
-          // eslint-disable-next-line no-continue
+          setTimeToWake(100);
           continue;
         }
 

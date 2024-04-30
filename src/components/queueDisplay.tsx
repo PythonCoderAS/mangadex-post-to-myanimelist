@@ -14,9 +14,9 @@ export default function QueueDisplay() {
     <div>
       <h4>Queue</h4>
       <ul>
-        {queue.posts.map((post) => (
+        {queue.posts.map((post, index) => (
           <li key={`${post.malId} | ${post.chapNum}`}>
-            <QueueItem {...post} />
+            <QueueItem {...post} index={index} />
           </li>
         ))}
       </ul>

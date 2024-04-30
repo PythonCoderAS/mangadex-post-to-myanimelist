@@ -18,3 +18,27 @@
   border-radius: 3px;
   padding: 10px;
 }
+
+.queueInfoItemRow {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 5px;
+}
+
+.actionButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.editButton {
+  color: #007bff;
+}
+
+.deleteButton {
+  color: #dc3545;
+}
+
+.actionButton:hover {
+  color: black;
+}

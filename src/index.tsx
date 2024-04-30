@@ -172,5 +172,8 @@ function onLoad() {
   render(<App />, root);
 }
 
-window.addEventListener("load", onLoad);
-onLoad();
+if (import.meta.env.DEV) {
+  onLoad();
+} else {
+  window.addEventListener("load", onLoad);
+}
