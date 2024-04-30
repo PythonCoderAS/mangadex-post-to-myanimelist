@@ -160,14 +160,17 @@ function App() {
   );
 }
 
+let done = false;
+
 function onLoad() {
+  if (!done) {
+    done = true;
+  }
+
   const root = document.createElement("div");
   document.body.appendChild(root);
   render(<App />, root);
 }
 
-if (import.meta.env.DEV) {
-  onLoad();
-} else {
-  document.addEventListener("load", onLoad);
-}
+window.addEventListener("load", onLoad);
+onLoad();
