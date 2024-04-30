@@ -160,6 +160,14 @@ function App() {
   );
 }
 
-const root = document.createElement("div");
-document.body.appendChild(root);
-render(<App />, root);
+function onLoad() {
+  const root = document.createElement("div");
+  document.body.appendChild(root);
+  render(<App />, root);
+}
+
+if (import.meta.env.DEV) {
+  onLoad();
+} else {
+  document.addEventListener("load", onLoad);
+}

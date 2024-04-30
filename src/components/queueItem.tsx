@@ -1,13 +1,12 @@
-import presetReact from "@bbob/preset-react";
-import BBCode from "@bbob/react";
+import bbobHTML from "@bbob/html";
+import presetHTML5 from "@bbob/preset-html5";
+import { convertHtmlToReact } from "@hedgedoc/html-to-react";
 
 import { Post } from "../types";
 import styles from "./queue-item.module.css";
 
-const plugins = [presetReact()];
-
 export default function QueueItem(props: Post) {
-  console.log(props);
+  const bbcode = bbobHTML(props.body, presetHTML5());
   return (
     <div class={styles.queueItem}>
       MAL ID: <b>{props.malId}</b> Chapter <b>{props.chapNum}</b>
@@ -19,7 +18,7 @@ export default function QueueItem(props: Post) {
         </pre>
         <h4>Preview</h4>
         <div class={`${styles.fiveRowTextDiv} ${styles.previewBox}`}>
-          <BBCode plugins={plugins}>{props.body}</BBCode>
+          {convertHtmlToReact(bbcode)}
         </div>
       </details>
     </div>
