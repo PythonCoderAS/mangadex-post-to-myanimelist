@@ -51,118 +51,116 @@ export default function worker(
           console.log(
             `Skipping ${JSON.stringify(post)} because it was already posted.`
           );
-          // eslint-disable-next-line no-continue
-          continue;
-        }
-
-        GM.xmlHttpRequest({
-          url: `https://myanimelist.net/forum/?${new URLSearchParams({
-            action: "post",
-            manga_id: String(post.malId),
-          })}`,
-          data: new URLSearchParams({
-            topic_title: "",
-            epNum: String(post.chapNum),
-            epcheck: "1",
-            msg_text: post.body,
-            pollQuestion: "",
-            "pollOption[]": "",
-            action_type: "submit",
-            manga_id: String(post.malId),
-            csrf_token: (await GM.getValue("csrf_token")) as string,
-          }).toString(),
-          headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
-          },
-          method: "POST",
-          // eslint-disable-next-line @typescript-eslint/no-loop-func
-          onreadystatechange(response: GM.Response<void>) {
-            GM.setValue(
-              "lastPost",
-              DateTime.now().setZone("America/New_York").toMillis()
-            );
-            let requeue = false;
-            if (response.readyState === 4) {
-              if (
-                response.status === 404 &&
-                response.responseText.includes(
-                  '<h1 class="h1">400 Bad Request</h1>'
-                )
-              ) {
-                addModal(
-                  makeSelfMountingModal({
-                    heading: "MAL Token Error",
-                    children: (
-                      <p>
-                        Requests are returning 400 Bad Requests. Check your MAL
-                        login.
-                      </p>
-                    ),
-                    removeModal,
-                  })
-                );
-                console.log(
-                  `Requeing ${JSON.stringify(post)} due to 400 error.`
-                );
-                requeue = true;
-              } else if (response.status === 400) {
-                // This usually means our CSRF token was invalid.
-                // Delete it and reload the page to invole the CSRF regeneration process.
-                console.log(
-                  `Requeing ${JSON.stringify(
-                    post
-                  )} due to 400 error (suspected bad CSRF token).`
-                );
-                requeue = true;
-                GM.deleteValue("csrf_token")
-                  .then(() => sleep(250))
-                  .then(location.reload);
-              } else if (
-                response.responseText.includes('<div class="badresult">')
-              ) {
+        } else {
+          GM.xmlHttpRequest({
+            url: `https://myanimelist.net/forum/?${new URLSearchParams({
+              action: "post",
+              manga_id: String(post.malId),
+            })}`,
+            data: new URLSearchParams({
+              topic_title: "",
+              epNum: String(post.chapNum),
+              epcheck: "1",
+              msg_text: post.body,
+              pollQuestion: "",
+              "pollOption[]": "",
+              action_type: "submit",
+              manga_id: String(post.malId),
+              csrf_token: (await GM.getValue("csrf_token")) as string,
+            }).toString(),
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded",
+            },
+            method: "POST",
+            // eslint-disable-next-line @typescript-eslint/no-loop-func
+            onreadystatechange(response: GM.Response<void>) {
+              GM.setValue(
+                "lastPost",
+                DateTime.now().setZone("America/New_York").toMillis()
+              );
+              let requeue = false;
+              if (response.readyState === 4) {
                 if (
+                  response.status === 404 &&
                   response.responseText.includes(
-                    "Please wait a few moments before trying to post again."
+                    '<h1 class="h1">400 Bad Request</h1>'
                   )
                 ) {
-                  // This means there was another post in-between.
+                  addModal(
+                    makeSelfMountingModal({
+                      heading: "MAL Token Error",
+                      children: (
+                        <p>
+                          Requests are returning 400 Bad Requests. Check your
+                          MAL login.
+                        </p>
+                      ),
+                      removeModal,
+                    })
+                  );
                   console.log(
-                    `Requeing ${JSON.stringify(post)} due to rate limiting.`
+                    `Requeing ${JSON.stringify(post)} due to 400 error.`
                   );
                   requeue = true;
-                } else {
-                  handler({
-                    heading: "Could Not Post, Please Edit and Re-Submit",
-                    malId: post.malId,
-                    chapNum: post.chapNum,
-                    body: post.body,
-                  });
-                }
-              } else if (
-                response.responseText.includes('<div class="goodresult">')
-              ) {
-                // Success
-                const newRequestsData: Post[] = [
-                  ...previousRequestsData.slice(0),
-                  post,
-                ];
-                if (newRequestsData.length > 100) {
-                  newRequestsData.shift();
+                } else if (response.status === 400) {
+                  // This usually means our CSRF token was invalid.
+                  // Delete it and reload the page to invole the CSRF regeneration process.
+                  console.log(
+                    `Requeing ${JSON.stringify(
+                      post
+                    )} due to 400 error (suspected bad CSRF token).`
+                  );
+                  requeue = true;
+                  GM.deleteValue("csrf_token")
+                    .then(() => sleep(250))
+                    .then(location.reload);
+                } else if (
+                  response.responseText.includes('<div class="badresult">')
+                ) {
+                  if (
+                    response.responseText.includes(
+                      "Please wait a few moments before trying to post again."
+                    )
+                  ) {
+                    // This means there was another post in-between.
+                    console.log(
+                      `Requeing ${JSON.stringify(post)} due to rate limiting.`
+                    );
+                    requeue = true;
+                  } else {
+                    handler({
+                      heading: "Could Not Post, Please Edit and Re-Submit",
+                      malId: post.malId,
+                      chapNum: post.chapNum,
+                      body: post.body,
+                    });
+                  }
+                } else if (
+                  response.responseText.includes('<div class="goodresult">')
+                ) {
+                  // Success
+                  const newRequestsData: Post[] = [
+                    ...previousRequestsData.slice(0),
+                    post,
+                  ];
+                  if (newRequestsData.length > 100) {
+                    newRequestsData.shift();
+                  }
+
+                  GM.setValue(
+                    "previousRequests",
+                    JSON.stringify(newRequestsData)
+                  );
                 }
 
-                GM.setValue(
-                  "previousRequests",
-                  JSON.stringify(newRequestsData)
-                );
+                if (requeue) {
+                  queue.addItem(post);
+                }
               }
-
-              if (requeue) {
-                queue.addItem(post);
-              }
-            }
-          },
-        });
-        setTimeToWake((5 * 60 + 10) * 1000);
+            },
+          });
+          setTimeToWake((5 * 60 + 10) * 1000);
+        }
       } else {
         setTimeToWake(1000);
       }
