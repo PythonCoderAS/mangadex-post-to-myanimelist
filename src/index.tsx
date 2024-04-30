@@ -174,6 +174,6 @@ function App() {
     render(<App />, root);
   }
 
-  setTimeout(onLoad, 2000);
+  setTimeout(onLoad, 1000);
 
 }

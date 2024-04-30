@@ -24,4 +24,9 @@ export default defineConfig({
     },
   },
   base: "https://pythoncoderas.github.io/mangadex-post-to-myanimelist/",
+  define: {
+    "process.env": {
+      NODE_ENV: JSON.stringify(process.env.NODE_ENV),
+    }
+  }
 });
