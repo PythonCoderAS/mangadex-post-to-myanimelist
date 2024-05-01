@@ -42,3 +42,8 @@ pre {
   padding: 10px;
   white-space: pre-wrap;
 }
+
+html {
+  font-size: 100%;
+  font-family: "Helvetica Neue", "Helvetica", sans-serif;
+}
