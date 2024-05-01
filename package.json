@@ -51,7 +51,7 @@
     "@hedgedoc/html-to-react": "^2.1.1",
     "lodash": "^4.17.21",
     "luxon": "^3.2.1",
-    "preact": "^10.20.0",
+    "preact": "^10.21.0",
     "sceditor": "^3.2.0"
   }
 }
