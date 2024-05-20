@@ -2,6 +2,7 @@ import makeSelfMountingModal from "./components/selfMountingModal";
 import { AddModalSignature, RemoveModalSignature } from "./context";
 import Queue from "./queue";
 import { Post } from "./types";
+import validText from "./validate";
 
 export default function generateSubmitHandler(params: {
   queue: Queue;
@@ -51,13 +52,13 @@ export default function generateSubmitHandler(params: {
       return false;
     }
 
-    if (bodyText.length < 15) {
+    if (bodyText.length < 15 || !validText(bodyText)) {
       addModal(
         makeSelfMountingModal({
           heading: "Body too short",
           children: (
             <p>
-              The body is too small! A post must have at least 15 characters.
+              The body is too small! A post must have at least 15 characters, not including whitespace, BBCode tags, quotes and images.
             </p>
           ),
           removeModal,
