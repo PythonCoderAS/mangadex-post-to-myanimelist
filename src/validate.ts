@@ -1,4 +1,8 @@
-import defaultParser, { BaseNode, ChildrenHolderNode, TextNode } from "bbcode-ast";
+import defaultParser, {
+  BaseNode,
+  ChildrenHolderNode,
+  TextNode,
+} from "bbcode-ast";
 
 function exportValidTextFromBBCodeNode(node: BaseNode): string {
   if (node instanceof TextNode) {
@@ -7,7 +11,14 @@ function exportValidTextFromBBCodeNode(node: BaseNode): string {
   }
 
   if (node instanceof ChildrenHolderNode) {
-    return node.children.filter(child => !(child instanceof ChildrenHolderNode) || (child.name !== "quote" && child.name !== "img")).map(exportValidTextFromBBCodeNode).join("");
+    return node.children
+      .filter(
+        (child) =>
+          !(child instanceof ChildrenHolderNode) ||
+          (child.name !== "quote" && child.name !== "img")
+      )
+      .map(exportValidTextFromBBCodeNode)
+      .join("");
   }
 
   throw new Error(`Unexpected node type: ${node.name}`);

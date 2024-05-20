@@ -175,5 +175,4 @@ function App() {
   }
 
   setTimeout(onLoad, 1000);
-
 }

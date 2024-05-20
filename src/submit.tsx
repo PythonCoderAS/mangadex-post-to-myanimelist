@@ -58,7 +58,8 @@ export default function generateSubmitHandler(params: {
           heading: "Body too short",
           children: (
             <p>
-              The body is too small! A post must have at least 15 characters, not including whitespace, BBCode tags, quotes and images.
+              The body is too small! A post must have at least 15 characters,
+              not including whitespace, BBCode tags, quotes and images.
             </p>
           ),
           removeModal,
