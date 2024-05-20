@@ -16,7 +16,7 @@
   border: 1px solid #ddd;
   width: 100%;
   padding: 3px;
-  color: initial;
+  color: #000;
 }
 
 .form > div > *:first-child {
